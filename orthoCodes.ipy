@@ -27,7 +27,6 @@ for file in files:
 	f.close()
 	for line in lines:
 		oneCol = line.partition('\t')[0]
-		#noFile = oneCol.replace('/home/aweber/data/T7SS/blast/results/blast_results_','   ')  ## Fix to support any blast directory
 		noFile = oneCol.replace(resultsDirectory,'   ')
 		noExtend = noFile.replace('.tsv:','|')
 		index = noExtend.index('|')
