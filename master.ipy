@@ -14,9 +14,7 @@ import os
 ##	 of PROKKA annotation files for the species***
 ##	-File containing the names of all the ESX gene (one per line)
 ##	-File containing the last four (or less) letters of the PROKKA
-	 annotation file names (one per line)
-
-
+##	 annotation file names (one per line)
 
 def usage():
     print "extract_headers.ipy\n \
