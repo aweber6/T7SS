@@ -1,0 +1,48 @@
+#!/usr/bin/ipython
+; -*- mode: python -*- 
+
+import sys
+import os
+
+## This is the master script to call all scripts for analysis of ESX genes
+## present in each species
+## INPUT: 
+##	-NCBI nucleotide sequence of species with all ESX genes (M.tb)
+##	-Directory of blast results from blasting NCBI sequence with
+##	 all species to be used in analysis 
+##	 ***File names in blast results directory should match the file names 
+##	 of PROKKA annotation files for the species***
+##	-File containing the names of all the ESX gene (one per line)
+##	-File containing the last four (or less) letters of the PROKKA
+	 annotation file names (one per line)
+
+
+
+def usage():
+    print "extract_headers.ipy\n \
+        <NCBI FASTA nucleotide sequence>\n \
+	<blast results directory>\n \
+	<file of gene names>\n \
+	<file of last four letters of PROKKA annotation directory names>"
+
+if len(sys.argv) != 5:
+    usage()
+search_file = sys.argv[1]
+blast_dir = sys.argv[2]
+gene_file = sys.argv[3]
+species_file = sys.argv[4]
+
+## Find NC numbers corresponding to gene names
+!/home/aweber/scripts/ESXspecies/geneToNC.ipy {search_file} {gene_file}
+
+## Search for NC number in blast results
+!/home/aweber/scripts/ESXspecies/searchBlastFiles.ipy {blast_dir} ./codes/ 
+
+## Create codes used by orthoMCL from blast results
+!/home/aweber/scripts/ESXspecies/orthoCodes.ipy ./blast_search/
+
+## Create a file for each gene with its orthologous groups
+!/home/aweber/scripts/ESXspecies/orthoGeneGroups.ipy ./ortho_codes/
+
+## Create files of genes present in each species
+!/home/aweber/scripts/ESXspecies/bySpecies.ipy ./orthologs/ {species_file}

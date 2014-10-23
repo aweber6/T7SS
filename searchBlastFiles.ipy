@@ -1,0 +1,24 @@
+#!/usr/bin/ipython
+; -*- mode: python -*-
+
+import sys
+import os
+
+## This script returns files with blast results (for each gene) which correspond 
+## to supplied NC numbers (directory of files containing NC numbers)
+
+def usage():
+	print "search_blast_files.ipy\n \
+		<directory with blast files>\n \
+		<dierecotry with NC code files>"
+
+if len(sys.argv) !=3:
+	usage()
+blastDirectory = sys.argv[1]
+ncDirectory = sys.argv[2]
+
+ncFiles = !ls {ncDirectory} 
+!mkdir blast_search
+for ncFile in ncFiles:
+	!grep -f {ncDirectory + '/' + ncFile} {blastDirectory + '*'} > {"./blast_search/" + ncFile}
+

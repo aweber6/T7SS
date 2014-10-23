@@ -1,0 +1,35 @@
+#!/usr/bin/ipython
+; -*- mode: python -*-
+
+import sys
+import os
+
+## This script takes a directory which has a files for each gene that 
+## contain the "ortho codes" for the gene. It creates a file for each
+## gene that contains the orthologous groups that gene in a part of.
+
+def usage():
+	print "find_ortho_groups.ipy\n \
+		<directory of ortho codes to search for>"
+
+if len(sys.argv) != 2:
+	usage()
+directory = sys.argv[1]
+
+!mkdir orthologs
+files = !ls {directory}
+for file in files:
+	gene = file.partition('_')[0]
+	f = open(directory + file)
+	codes = f.readlines()
+	f.close()
+	for code in codes:
+		clean_code = '"%s"' % code[:-1]
+		!grep {clean_code} ~/data/T7SS/ortho_mcl/groups.txt >> {"./orthologs/" + gene + '.txt'}
+
+fils = !ls orthologs
+for fil in fils:
+	gene = fil.partition('.')[0]
+	!sort {"orthologs/" + fil} | uniq > {"orthologs/" + gene}
+
+!rm ./orthologs/*.txt
