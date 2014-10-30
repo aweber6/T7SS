@@ -10,11 +10,13 @@ import os
 
 def usage():
 	print "find_ortho_groups.ipy\n \
-		<directory of ortho codes to search for>"
+		<directory of ortho codes to search for>\n \
+		<orthoMCL groups.txt file>"
 
-if len(sys.argv) != 2:
+if len(sys.argv) != 3:
 	usage()
 directory = sys.argv[1]
+groups_file = sys.argv[2]
 
 !mkdir orthologs
 files = !ls {directory}
@@ -25,7 +27,7 @@ for file in files:
 	f.close()
 	for code in codes:
 		clean_code = '"%s"' % code[:-1]
-		!grep {clean_code} ~/data/T7SS/ortho_mcl/groups.txt >> {"./orthologs/" + gene + '.txt'}
+		!grep {clean_code} {groups_file} >> {"./orthologs/" + gene + '.txt'}
 
 fils = !ls orthologs
 for fil in fils:
