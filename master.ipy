@@ -15,6 +15,7 @@ import os
 ##	-File containing the names of all the ESX gene (one per line)
 ##	-File containing the last four (or less) letters of the PROKKA
 ##	 annotation file names (one per line)
+##	-groups.txt file of the orthomcl run of all species 
 
 def usage():
     print "extract_headers.ipy\n \
@@ -46,3 +47,8 @@ groups_file = sys.argv[5]
 
 ## Create files of genes present in each species
 !/home/aweber/scripts/ESXspecies/bySpecies.ipy ./orthologs/ {species_file}
+
+!rm -r blast_search
+!rm -r codes
+!rm -r genes
+!rm -r ortho_codes
