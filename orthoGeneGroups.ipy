@@ -18,7 +18,7 @@ if len(sys.argv) != 3:
 directory = sys.argv[1]
 groups_file = sys.argv[2]
 
-!mkdir orthologs
+!mkdir ortho_byGene
 files = !ls {directory}
 for file in files:
 	gene = file.partition('_')[0]
@@ -27,11 +27,11 @@ for file in files:
 	f.close()
 	for code in codes:
 		clean_code = '"%s"' % code[:-1]
-		!grep {clean_code} {groups_file} >> {"./orthologs/" + gene + '.txt'}
+		!grep {clean_code} {groups_file} >> {"./ortho_byGene/" + gene + '.txt'}
 
-fils = !ls orthologs
+fils = !ls ortho_byGene
 for fil in fils:
 	gene = fil.partition('.')[0]
-	!sort {"orthologs/" + fil} | uniq > {"orthologs/" + gene}
+	!sort {"ortho_byGene/" + fil} | uniq > {"ortho_byGene/" + gene}
 
-!rm ./orthologs/*.txt
+!rm ./ortho_byGene/*.txt

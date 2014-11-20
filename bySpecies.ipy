@@ -18,7 +18,7 @@ if len(sys.argv) != 3:
 ortho_dir = sys.argv[1]
 species_file = sys.argv[2]
 
-!mkdir by_species
+!mkdir genes_bySpecies
 f = open(species_file)
 lines = f.readlines()
 f.close
@@ -28,6 +28,6 @@ for line in lines:
 	for line in ortho_group:
 		noFile = line.replace(ortho_dir,'')
 		oneCol = noFile.partition(':')[0]
-		i = open("by_species/" + clean_line + "_genes", "a")
+		i = open("genes_bySpecies/" + clean_line + "_genes", "a")
 		i.write(oneCol + '\n')
 		i.close()
