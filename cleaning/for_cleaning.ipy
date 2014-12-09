@@ -1,0 +1,30 @@
+#!/usr/bin/ipython
+; -*- mode: python -*- 
+
+import sys
+import os
+
+## This script was used to create files which could easily identify what PROKKA 
+## genes were not located near the others of the locus and should be removed. 
+
+
+species_dir = sys.argv[1]
+genes_dir = sys.argv[2]
+
+
+species = !ls {species_dir}
+for file in species:
+	dir_name = "~/data/T7SS/coded/orthologs/by_locus/species/" + file
+	!mkdir {dir_name}
+	!mkdir {dir_name + "/five/"}
+	code = file.split("_",1)[0]
+	print code
+	genes = !ls {genes_dir}
+	for gene in genes:
+		print gene
+		print genes_dir + gene
+		!cat {genes_dir + gene} | tr ' ' '\n' | grep {code} >> {dir_name + "/five/" + gene}
+	
+
+
+

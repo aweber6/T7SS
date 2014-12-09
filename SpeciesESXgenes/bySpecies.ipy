@@ -1,0 +1,33 @@
+#!/usr/bin/ipython
+;-*- mode: python -*-
+
+import sys
+import os
+
+## This script takes orthologous groups sorted by genes and determines what 
+## genes are present in each species
+
+def usage():
+	print "species.ipy\n \
+		<ortholog directory>\n \
+		<species code file>"
+
+if len(sys.argv) != 3:
+	usage()
+
+ortho_dir = sys.argv[1]
+species_file = sys.argv[2]
+
+!mkdir genes_bySpecies
+f = open(species_file)
+lines = f.readlines()
+f.close
+for line in lines:
+	clean_line = line.strip()
+	ortho_group = !grep {'"' + clean_line + '"'} {ortho_dir + "*"}
+	for line in ortho_group:
+		noFile = line.replace(ortho_dir,'')
+		oneCol = noFile.partition(':')[0]
+		i = open("genes_bySpecies/" + clean_line + "_genes", "a")
+		i.write(oneCol + '\n')
+		i.close()

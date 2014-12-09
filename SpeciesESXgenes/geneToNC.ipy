@@ -1,0 +1,91 @@
+#!/usr/bin/ipython
+; -*- mode: python -*- 
+
+import sys
+import os
+
+## This script takes an NCBI FASTA nucleotide sequence file and a list of genes
+## and finds the NC numbers corresponding to each of the gene names. These are 
+## placed into two directories - one containing just the NC number (to be used
+## in further analysis) and one with both the NC number and the corresponding
+## gene name (to be used as reference)
+
+
+def usage():
+    print "extract_headers.ipy\n \
+        <NCBI FASTA nucleotide sequence>\n \
+	<file of gene names>"
+
+if len(sys.argv) != 3:
+    usage()
+
+
+
+search_file = sys.argv[1]
+gene_file = sys.argv[2]
+
+
+
+## Obtain patterns
+fPattern = open(gene_file)
+genes = fPattern.readlines()
+fPattern.close()
+## search for gene names in FASTA and write to gene files
+fSearch = open(search_file)
+for gene in genes:
+	clean_gene = '"%s"' % gene[:-1]
+	print clean_gene
+	!grep {clean_gene} {search_file} > {gene}
+fSearch.close()
+
+## Create two directories each containing a file for each gene
+## (1) NC code with corresponding gene name - for reference
+## (2) NC code only - to be used in further analysis
+
+# remove first character of each line 
+files = !ls
+for filename in files:
+	f = open(filename)
+	headers = f.readlines()
+	f.close()
+	f = open(filename, 'w')
+	for header in headers:
+		f.write(header[1:])
+	f.close()
+
+
+	# create files with only NC code and gene name
+	!touch {filename + '_genes.txt'}
+	geneFileName = filename + '_genes.txt'
+	f = open(filename)
+	headers = f.readlines()
+	f.close()
+	for header in headers:
+		sp = header.split()
+		geneFile = open(geneFileName,'a')
+		print sp[0:2]
+		geneFile.write(','.join(sp[0:2]) + '\n' )
+		geneFile.close()
+
+
+	# create files with only the NC code
+	!touch {filename + '_codes.txt'}
+	codeFileName = filename + '_codes.txt'
+	f = open(filename)
+	headers = f.readlines()
+	f.close()
+	for header in headers:
+		sp = header.split()
+		codeFile = open(codeFileName,'a')
+		print str(sp[0:1]).strip('[]').strip("''")
+		codeFile.write(str(sp[0:1]).strip('[]').strip("''") + '\n')
+		codeFile.close()
+
+#create directories if not already created
+!mkdir -p genes
+!mkdir -p codes
+
+#move files into respective directories and delete temporary files
+!mv *_genes.txt ./genes
+!mv *_codes.txt ./codes
+!rm *

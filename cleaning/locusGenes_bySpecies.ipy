@@ -1,0 +1,38 @@
+#!/usr/bin/ipython
+; -*- mode: python -*- 
+
+import sys
+import os
+
+## This script creates files for each species which contains the PROKKA genes
+## which are present in that locus (obtained from the orthologous groups from 
+## that locus) 
+## Needs to be run once for each locus in the directory containing the directory
+## with files containing the orthologous groups
+
+def usage():
+    print "by_locus.ipy\n \
+        <file of species codes>\n \
+	<file of species names corrsponding order with code file>"
+
+if len(sys.argv) != 2:
+    usage()
+code_file = sys.argv[1]
+species_file = sys.argv[2]
+
+c = open(code_file,"r")
+codes = c.readlines()
+s = open(species_file,"r")
+species = s.readlines()
+
+for i in range(0,len(codes)):
+	code = codes[i].strip()
+	specie = species[i].strip()
+	t = !cat genes/* | tr ' ' '\n' | grep {'"' + code + '"'} 
+	filename = "species/" + code + "_" + specie
+	print filename
+	f = open(filename, "a")	
+	for line in t:
+		f.write(line.split("|",1)[-1] + "\n")
+		
+	f.close

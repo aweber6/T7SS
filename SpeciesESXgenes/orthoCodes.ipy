@@ -1,0 +1,43 @@
+#!/usr/bin/ipython
+; -*- mode: python -*-
+
+import sys
+import os
+
+## This script convert the blast results into the codes used by orthoMCL
+## (last for letters of oringinal file name (speices name), followed by
+## '|', followed by the PROKKA gene code) and places them in a the 
+## directory ortho_codes
+
+## *need to fix the removal of the file path to work with any blast dir*
+
+def usage():
+	print "mk_orhto_codes.ipy\n \
+		<directory with blast results to be converted>"
+
+if len(sys.argv) != 2:
+	usage()
+
+resultsDirectory = sys.argv[1]
+
+files = !ls {resultsDirectory}
+for file in files:
+	f = open(resultsDirectory + file)
+	lines = f.readlines()
+	f.close()
+	for line in lines:
+		oneCol = line.partition('\t')[0]
+		noFile = oneCol.replace(resultsDirectory,'   ')
+		noExtend = noFile.replace('.tsv:','|')
+		index = noExtend.index('|')
+		
+		## for orthoMCL code
+		onlyFour = noExtend[index - 4:].lstrip()
+		## for full species name		
+		#onlyFour = noExtend.lstrip()
+
+		i = open(file, "a")
+		i.write(onlyFour + '\n')
+		i.close()
+!mkdir ortho_codes
+!mv *_codes.txt ./ortho_codes
