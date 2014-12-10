@@ -61,7 +61,7 @@ for strain_file in strain_files:
 	infile = ann_dir + species + "/" + species + ".faa"
 	outfile = strain_file.split("_")[0] + "_" + strain_file.split("_")[1]
 	print outfile
-	!~/scripts/ESXspecies/makeTrees/FastaEditor.py {infile} {outfile} {strain_file}
+	!~/scripts/T7SS/makeTrees/FastaEditor.py {infile} {outfile} {strain_file}
 					 
 				
 			

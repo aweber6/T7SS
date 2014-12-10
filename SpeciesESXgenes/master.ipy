@@ -34,19 +34,19 @@ species_file = sys.argv[4]
 groups_file = sys.argv[5]
 
 ## Find NC numbers corresponding to gene names
-!/home/aweber/scripts/ESXspecies/geneToNC.ipy {search_file} {gene_file}
+!/home/aweber/scripts/T7SS/SpeciesESXgenes/geneToNC.ipy {search_file} {gene_file}
 
 ## Search for NC number in blast results
-!/home/aweber/scripts/ESXspecies/searchBlastFiles.ipy {blast_dir} ./codes/ 
+!/home/aweber/scripts/T7SS/SpeciesESXgenes/searchBlastFiles.ipy {blast_dir} ./codes/ 
 
 ## Create codes used by orthoMCL from blast results
-!/home/aweber/scripts/ESXspecies/orthoCodes.ipy ./blast_search/
+!/home/aweber/scripts/T7SS/SpeciesESXgenes/orthoCodes.ipy ./blast_search/
 
 ## Create a file for each gene with its orthologous groups
-!/home/aweber/scripts/ESXspecies/orthoGeneGroups.ipy ./ortho_codes/ {groups_file}
+!/home/aweber/scripts/T7SS/SpeciesESXgenes/orthoGeneGroups.ipy ./ortho_codes/ {groups_file}
 
 ## Create files of genes present in each species
-!/home/aweber/scripts/ESXspecies/bySpecies.ipy ./ortho_byGene/ {species_file}
+!/home/aweber/scripts/T7SS/SpeciesESXgenes/bySpecies.ipy ./ortho_byGene/ {species_file}
 
 !rm -r blast_search
 !rm -r codes
