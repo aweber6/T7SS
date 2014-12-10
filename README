@@ -1,0 +1,24 @@
+README: /home/aweber/scripts/T7SS/
+
+These are scripts used for the T7SS project. It contains scripts to determine 
+what species contain genes from each of the five ESX loci as well as creating
+phylogenetic trees of the species for each of the five loci.
+
+-----------------	--------------------------
+Directory		Description
+-----------------	--------------------------
+SpeciesESXgenes		These scripts are used together to determine the whether 
+			certain genes of interest are present in various species
+
+
+cleaning		These scripts are used to create files that make it easy
+			to hand eliminate PROKKA genes that are distant from the
+			ESX loci
+
+makeTrees		These are scripts used to create files which can be used 
+			to make phylogenetic trees of each of the ESX loci
+
+
+-------------------	---------------------------
+File			Description
+-------------------	---------------------------
