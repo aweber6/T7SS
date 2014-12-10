@@ -1,0 +1,28 @@
+#!/usr/bin/ipython
+; -*- mode: python -*- 
+
+import sys
+import os
+
+## This script creates trees for each of the ESX genes which can 
+## be used to eliminate PROKKA genes which do no correspond to the 
+## ESX gene
+
+def usage():
+    print "by_locus.ipy\n \
+        <fasta directory species names add to PROKKA gene names>\n \
+	<ouput directory>"
+
+if len(sys.argv) != 3:
+    usage()
+align_dir = sys.argv[1]
+out_dir = sys.argv[2]
+
+alignments = !ls {align_dir}
+!mkdir bestTrees
+for alignment in alignments:
+	infile = alignment
+	outfile = alignment + "_tree"
+	!/opt/PepPrograms/standard-RAxML/raxmlHPC-PTHREADS-AVX -m PROTGAMMAWAG -s {infile} -# 20 -n {outfile} -T 6 -p 123
+
+!mv {outdir + "*bestTree* " + outdir + "bestTrees"} 

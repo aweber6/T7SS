@@ -1,0 +1,70 @@
+#!/usr/bin/ipython
+; -*- mode: python -*- 
+
+import sys
+import os
+import getopt
+from Bio import AlignIO
+from Bio import SeqIO
+
+## This script concatenates the gene/species FASTA files into one
+## FASTA for each ESX gene (containing PROKKA genes from across
+## all the species) and then aligns and trims ESXgene FASTA files
+## 
+## Run in directory you want files output
+
+
+def usage():
+    print "by_locus.ipy\n \
+        <file of ESX gene names>\n \
+	<directory of species_gene fastas>"
+
+if len(sys.argv) !=3:
+    usage()
+gene_file = sys.argv[1]
+fasta_dir = sys.argv[2]
+
+
+def catGeneFasta(genes):
+	for gene in genes:
+		gene = gene.strip()
+		files = !ls {fasta_dir + "*_" + gene + "*"}
+		print files
+		for file in files:
+			!cat {file} >> {gene}
+
+def alignment(genes):
+	for gene in genes:
+		print gene
+		!mafft --auto {gene} > {gene + "_align"} 
+		print gene
+
+def trim_alignments(fileList):
+    """ Use trimAl to trim gaps from input alignments"""
+    outfileList = []
+    for infile in fileList:
+        outfile = os.path.splitext(infile)[0] + '_trim.fasta'
+        outfileList.append(outfile)
+        !/opt/PepPrograms/trimal/source/trimal -in {infile} -out {outfile} -automated1
+    return outfileList
+
+
+
+
+
+f = open(gene_file,"r")
+genes = f.readlines()
+catGeneFasta(genes)
+
+genes = !ls -f
+alignment(genes)
+
+files = !ls *_align
+trim_alignments(files)
+
+
+!mkdir aligned
+!mkdir trimmed
+
+!mv *_trim.fasta trimmed
+!mv *_align aligned

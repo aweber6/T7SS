@@ -1,0 +1,30 @@
+README: /home/aweber/scripts/ESXspecies/makeTrees
+
+These are scripts used to create files which can be used to make phylogenetic 
+trees of each of the ESX loci
+
+-----------------	--------------------------
+Directory		Description
+-----------------	--------------------------
+geneTrees		scripts used to create trees for each ESX gene
+			to help eliminate PROKKA genes that do not
+			correspond to the ESX gene
+
+
+-------------------	---------------------------
+File			Description
+-------------------	---------------------------
+FastaEditor.py		creates a new FASTA file containing only the genes 
+			supplied in a text file (one per line) and an original 
+			FASTA file from which to extract these genes from
+
+speciesGene_fasta.ipy	creates a FASTA file of each ESX gene for each species
+
+geneAlignment.ipy	concatenates the gene/species FASTA files into one FASTA 
+			for each ESX gene (containing PROKKA genes from across 
+			all the species) and then aligns and trims ESXgene FASTA 
+			files
+
+locusAlignment.ipy	concatenates the alignments of all the ESX gene FASTAs
+			into one FASTA file for the locus which can be used
+			to create the phylogenetic trees

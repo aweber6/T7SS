@@ -1,0 +1,70 @@
+#!/usr/bin/ipython
+; -*- mode: python -*- 
+
+## creates a FASTA file of each ESX gene for each species
+## Run in the directory you would like to files ouput to
+##
+## *gene_list variable has hard coded directory name*
+## *FastaEditor.py script location is hard coded in*
+
+import sys
+import os
+
+def usage():
+    print "by_locus.ipy\n \
+        <directory of gene orthologous group files>\n \
+	<any direcotry containing file names in format code_speices>\n \
+	<directory of prokka annotations>\n \
+	<locus number (writen in letters) of the directory>"
+
+if len(sys.argv) != 5:
+    usage()
+gene_dir = sys.argv[1]
+fasta_dir = sys.argv[2]
+ann_dir = sys.argv[3]
+locus = sys.argv[4]
+
+
+## create files containing the PROKKA genes for each species that correspond
+## to each ESX gene
+genes = !ls {gene_dir}
+files = !ls {fasta_dir}
+for gene in genes:
+	print "gene: " + gene
+	lines = !cat {gene_dir + gene} | tr ' ' '\n'
+	for line in lines:
+		print line
+		if "core" in line:
+			continue
+		else:
+			code = line.split("|", 1)[0]
+			prokka_gene = line.split("|",1)[1]
+			for file in files:
+				if code in file:
+					print prokka_gene
+					
+					## this should be directory containing the PROKKA genes for the species after removing distant genes
+					gene_list = !cat {"~/data/T7SS/analysis/by_locus_cleaned/" + locus + "/" + file}
+					print gene_list
+					
+					species = file.split("_", 1)[1]
+					print "species: " +  species
+					print prokka_gene in gene_list
+					if prokka_gene in gene_list:
+						f = open(species + "_" + gene, "a")
+						f.write(prokka_gene + "\n")
+
+## create FASTA files containing only the genes in the files above
+strain_files = !ls
+for strain_file in strain_files:
+	species = strain_file.split("_")[0]
+	infile = ann_dir + species + "/" + species + ".faa"
+	outfile = strain_file.split("_")[0] + "_" + strain_file.split("_")[1]
+	print outfile
+	!~/scripts/ESXspecies/makeTrees/FastaEditor.py {infile} {outfile} {strain_file}
+					 
+				
+			
+			
+			
+

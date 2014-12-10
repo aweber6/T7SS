@@ -1,0 +1,60 @@
+#!/usr/bin/ipython
+; -*- mode: python -*-
+
+## concatenates the alignments of all the ESX gene FASTAs
+## into one FASTA file for the locus which can be used
+## to create the phylogenetic trees
+##
+## Must be run once for each locus
+##
+## *Names of species must be hard coded in base on order
+##  they are present in the FASTA files (alphabetical - 
+##  there will be a different number for each locus based
+##  on the number of species with the locus)
+
+import sys
+import os
+import getopt
+from Bio import AlignIO
+from Bio import SeqIO
+
+def usage():
+    print "by_locus.ipy\n \
+	<directory of trimmed ESX gene FASTAs for a locus>"
+
+trim_dir = sys.argv[1]
+
+def concatenate_alignments(fileList):
+    """ Using Biopython, concatenate alignments produced by MAFFT"""
+    print fileList
+    coreAlignment = AlignIO.read(fileList[0], 'fasta')
+    print len(coreAlignment)
+    
+    for i in range(1, len(fileList)):
+        align = AlignIO.read(fileList[i], 'fasta')
+        print len(align)
+        coreAlignment = coreAlignment + align
+
+## Add species names in order that they appear in the FASTA files
+    coreAlignment[0].id = "abscessus"
+    coreAlignment[1].id = "africanum"
+    coreAlignment[2].id = "avium"
+    coreAlignment[3].id = "gilvum"
+    coreAlignment[4].id = "JLS"
+    coreAlignment[5].id = "KMS"
+    coreAlignment[6].id = "leprae"
+    coreAlignment[7].id = "marinum"
+    coreAlignment[8].id = "MCS"
+    coreAlignment[9].id = "smegmatis"
+    coreAlignment[10].id = "tuberculosis"
+    coreAlignment[11].id = "ulcerans"
+    coreAlignment[12].id = "vanbaalenii"
+    coreAlignment[13].id = "yongonense"
+
+
+    AlignIO.write(coreAlignment, "core_alignment.fasta", 'fasta')
+  
+
+files = !ls {trim_dir}
+concatenate_alignments(files)
+

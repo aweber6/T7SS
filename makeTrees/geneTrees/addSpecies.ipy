@@ -1,0 +1,32 @@
+#!/usr/bin/ipython
+; -*- mode: python -*- 
+
+import sys
+import os
+
+## Add species name into fasta gene names to create unique identifiers in
+## concatenated fasta files
+
+def usage():
+    print "by_locus.ipy\n \
+        <directory of FASTAs to be altered>\n \
+	<ouput directory>"
+
+if len(sys.argv) != 3:
+    usage()
+fasta_dir = sys.argv[1]
+out_dir = sys.argv[2]
+
+fastas = !ls {fasta_dir}
+for fasta in fastas:
+	spName = fasta.split("_", 1)[0]
+	f = open(fasta_dir + fasta, "r")
+	lines = f.readlines()
+	w = open(out_dir + fasta + "_Species", "a")
+	for line in lines:
+		line = line.strip()
+		if ">" in line:
+			newLine = line.replace(">PROKKA", ">" + spName + "_PROKKA")
+			w.write(newLine + '\n')
+		else:
+			w.write(line +'\n')
