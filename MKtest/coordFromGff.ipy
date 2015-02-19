@@ -1,0 +1,40 @@
+#!/usr/bin/ipython
+; -*- mode: python -*- 
+
+import sys
+import os
+
+def usage():
+    print "by_locus.ipy\n \
+        <.gff file>\n \
+	<prokka genes names file>"
+
+
+gff_file = sys.argv[1]
+geneName_file = sys.argv[2]
+
+
+g = open(gff_file,"r")
+lines = g.readlines()
+#print(lines)
+n = open(geneName_file,"r")
+names = n.readlines()
+#print(names)
+
+w = open("coord.txt", "w")
+w.write("Start" + '\t' + "Stop" + '\t' + "Gene_Name" + '\n')
+
+for i in range(0,len(names)):
+	name = names[i].strip()
+	for line in lines:
+		name in line
+		if(name in line):
+			splits = line.split('\t')
+			start = splits[3]
+			stopp = splits[4]
+			print(name)
+			print(start)
+			print(stopp)
+			w.write(start + '\t' + stopp + '\t' + name + '\n')
+
+w.close()
